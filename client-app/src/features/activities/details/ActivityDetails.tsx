@@ -1,16 +1,17 @@
-import React, { Fragment } from 'react'
-import { Activity } from '../../../app/models/activity'
+import React, { Fragment } from 'react';
+import { useStore } from '../../../app/stores/store';
 
 
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card, Image } from 'semantic-ui-react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
-interface Props{
-    activity : Activity,
-    cancelSelectActivity: () => void;
-    openForm : (id: string) => void;
-}
 
-const ActivityDetails = ({activity, cancelSelectActivity, openForm}:Props) => {
+const ActivityDetails = () => {
+    const {activityStore} = useStore();
+    const {selectedActivity: activity, openForm, cancelSelectedActivity} = activityStore;
+
+    if(!activity) return <LoadingComponent/>;
+
     return (
         <Fragment>
             <Card fluid>
@@ -27,7 +28,7 @@ const ActivityDetails = ({activity, cancelSelectActivity, openForm}:Props) => {
                 <Card.Content extra>
                     <Button.Group widths='2'>
                         <Button basic color='blue' content='Edit' onClick={() => openForm(activity.id)}/>
-                        <Button basic color='grey' content='Cancel' onClick={cancelSelectActivity}/>
+                        <Button basic color='grey' content='Cancel' onClick={cancelSelectedActivity}/>
                     </Button.Group>
                 </Card.Content>
             </Card>

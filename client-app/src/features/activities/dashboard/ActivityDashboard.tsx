@@ -1,61 +1,32 @@
 import React, { Fragment } from 'react'
-import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 import {Grid} from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import ActivityDetails from '../details/ActivityDetails';
 import ActivityForm from '../form/ActivityForm';
 
-interface Props{
-    activities : Activity[];
-    selectedActivity : Activity | undefined;
-    selectActivity: (is:string) => void;
-    cancelSelectActivity: () => void;
-    editMode: boolean;
-    openForm: (id: string) => void;
-    closeForm: () => void;
-    createOrEdit: (activity: Activity) => void;
-    deleteActivity: (id: string) => void;
-    submitting: boolean;
-}
 
-const ActivityDashboard = ({activities, selectedActivity, 
-    selectActivity, cancelSelectActivity, editMode, submitting,
-    openForm, closeForm, createOrEdit, deleteActivity}:Props) => {
+const  ActivityDashboard = () => {
+
+    const {activityStore} = useStore();
+    const {selectedActivity, editMode} = activityStore;
 
     return (
         <Fragment>
             <Grid>
                 <Grid.Column width='10'>
-                    <ActivityList 
-                        activities={activities} 
-                        selectActivity={selectActivity}
-                        deleteActivity={deleteActivity}
-                        submitting={submitting} 
-                    />
+                    <ActivityList/>
                 </Grid.Column>
 
                 <Grid.Column width='6'>
-                    {selectedActivity && !editMode &&
-                        <ActivityDetails 
-                            activity={selectedActivity} 
-                            openForm={openForm} 
-                            cancelSelectActivity={cancelSelectActivity}
-                        />
-                    }
-                    {
-                        editMode &&
-                        <ActivityForm 
-                            activity={selectedActivity} 
-                            closeForm={closeForm}
-                            createOrEdit={createOrEdit}
-                            submitting={submitting}
-                        />
-                    }
+                    {selectedActivity && !editMode && <ActivityDetails/>}
+                    { editMode && <ActivityForm/> }
                 </Grid.Column>
             </Grid>
         </Fragment>
     )
 }
 
-export default ActivityDashboard
+export default observer(ActivityDashboard);
