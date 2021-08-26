@@ -1,18 +1,25 @@
-import React, { Fragment } from 'react'
+// dependency imports
+import React, { Fragment, useEffect } from 'react'
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 
+// app component imports
 import {Grid} from 'semantic-ui-react';
 import ActivityList from './ActivityList';
-import ActivityDetails from '../details/ActivityDetails';
-import ActivityForm from '../form/ActivityForm';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 
 const  ActivityDashboard = () => {
-
     const {activityStore} = useStore();
-    const {selectedActivity, editMode} = activityStore;
+    const {loadActivities, activityRegistry} = activityStore;
 
+    // side effects
+    useEffect(() => {
+        if(activityRegistry.size <= 1) loadActivities();
+    }, [activityRegistry.size, loadActivities]);
+
+    if(activityStore.loadingInitial) return <LoadingComponent content='Loading activities'/>
+    
     return (
         <Fragment>
             <Grid>
@@ -21,8 +28,7 @@ const  ActivityDashboard = () => {
                 </Grid.Column>
 
                 <Grid.Column width='6'>
-                    {selectedActivity && !editMode && <ActivityDetails/>}
-                    { editMode && <ActivityForm/> }
+                    <h2>Activity Filters</h2>
                 </Grid.Column>
             </Grid>
         </Fragment>

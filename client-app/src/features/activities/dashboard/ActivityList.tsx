@@ -1,13 +1,16 @@
+// dependency imports
 import React, { Fragment, useState, MouseEvent } from 'react'
 import { useStore } from '../../../app/stores/store'
 import { observer } from 'mobx-react-lite';
 
+// app component imports
 import { Button, Item, Label, Segment } from 'semantic-ui-react'
+import { Link } from 'react-router-dom';
 
 
 const ActivityList = () => {
     const {activityStore} = useStore();
-    const {selectActivity, loading, deleteActivity, activitiesByDate: activities} = activityStore;
+    const { loading, deleteActivity, activitiesByDate: activities} = activityStore;
 
     const [target, setTarget] = useState('');
 
@@ -30,7 +33,7 @@ const ActivityList = () => {
                                     <div>{activity.city}, {activity.venue}</div>
                                 </Item.Description>
                                 <Item.Extra>
-                                    <Button floated='right' content='View' color='blue' onClick={() => selectActivity(activity.id)}/>
+                                    <Button floated='right' content='View' color='blue' as={Link} to={`/activities/${activity.id}`}/>
                                     <Button 
                                         name={activity.id}
                                         loading={loading && target === activity.id} 
