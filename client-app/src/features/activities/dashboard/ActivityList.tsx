@@ -1,54 +1,28 @@
 // dependency imports
-import React, { Fragment, useState, MouseEvent } from 'react'
-import { useStore } from '../../../app/stores/store'
+import React, { Fragment } from 'react'
+import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 
 // app component imports
-import { Button, Item, Label, Segment } from 'semantic-ui-react'
-import { Link } from 'react-router-dom';
-
+import { Header } from 'semantic-ui-react';
+import ActivityListItem from './ActivitiListItem';
 
 const ActivityList = () => {
     const {activityStore} = useStore();
-    const { loading, deleteActivity, activitiesByDate: activities} = activityStore;
-
-    const [target, setTarget] = useState('');
-
-    const handleActivityDelete = (e:MouseEvent<HTMLButtonElement>, id:string) => {
-        setTarget(e.currentTarget.name);
-        deleteActivity(id);
-    } 
+    const { groupedActivities } = activityStore;
 
     return (
         <Fragment>
-            <Segment>
-                <Item.Group divided>
+            {groupedActivities.map(([group, activities]) => (
+                <Fragment key={group}>
+                    <Header sub color='teal'> 
+                        {group}
+                    </Header>
                     {activities.map(activity => (
-                        <Item key={activity.id}>
-                            <Item.Content>
-                                <Item.Header as='a' >{activity.title}</Item.Header>
-                                <Item.Meta>{activity.date}</Item.Meta>
-                                <Item.Description>
-                                    <div>{activity.description}</div>
-                                    <div>{activity.city}, {activity.venue}</div>
-                                </Item.Description>
-                                <Item.Extra>
-                                    <Button floated='right' content='View' color='blue' as={Link} to={`/activities/${activity.id}`}/>
-                                    <Button 
-                                        name={activity.id}
-                                        loading={loading && target === activity.id} 
-                                        floated='right' 
-                                        content='Delete' 
-                                        color='red' 
-                                        onClick={(e) => handleActivityDelete(e, activity.id)}
-                                    />
-                                    <Label basic content={activity.category}/>
-                                </Item.Extra>
-                            </Item.Content>
-                        </Item>
+                        <ActivityListItem key={activity.id} activity={activity}/>
                     ))}
-                </Item.Group>
-            </Segment>
+                </Fragment>
+            ))}
         </Fragment>
     )
 }
