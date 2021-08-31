@@ -2,9 +2,11 @@
 import React, { Fragment } from 'react';
 import { Activity } from '../../../app/models/activity';
 import { observer } from 'mobx-react-lite';
+import { format } from 'date-fns';
 
 // app component imports
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 interface Props{
     activity : Activity
@@ -38,7 +40,7 @@ const ActivityDetailedHeader = ({activity}: Props) => {
                                         content={activity.title}
                                         style={{ color: 'white' }}
                                     />
-                                    <p>{activity.date}</p>
+                                    <p>{format(activity.date!, 'dd MMM yyyy h:mm aa')}</p>
                                     <p>
                                         Hosted by <strong>Bob</strong>
                                     </p>
@@ -51,7 +53,7 @@ const ActivityDetailedHeader = ({activity}: Props) => {
                 <Segment clearing attached='bottom'>
                     <Button color='teal'>Join Activity</Button>
                     <Button>Cancel Activity</Button>
-                    <Button color='orange' floated='right'>
+                    <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>
                         Manage Event 
                     </Button>
                 </Segment>

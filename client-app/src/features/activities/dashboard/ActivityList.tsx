@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 // app component imports
 import { Header } from 'semantic-ui-react';
-import ActivityListItem from './ActivitiListItem';
+import ActivityListItem from './ActivityListItem';
 
 const ActivityList = () => {
     const {activityStore} = useStore();
