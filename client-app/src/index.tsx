@@ -15,7 +15,7 @@ export const history = createBrowserHistory();
 
 ReactDOM.render(
   <StoreContext.Provider value={store}>
-    <Router history={history}>
+    <Router history={history} >
       <App />
     </Router>
   </StoreContext.Provider>,

@@ -9,6 +9,7 @@ interface Props{
     placeholder: string;
     name: string;
     label?: string;
+    type? : string; 
 }
 
 const ReactiveTextInput = (props: Props) => {

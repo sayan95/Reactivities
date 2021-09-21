@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
-
         [HttpGet]
         public async Task<IActionResult> GetActivities()
         {

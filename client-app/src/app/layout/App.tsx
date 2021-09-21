@@ -1,5 +1,5 @@
 // dependency imports
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import {Route, Switch, useLocation} from 'react-router-dom';
 
@@ -14,12 +14,30 @@ import ActivityDashboard from '../../features/activities/dashboard/ActivityDashb
 import TestErrors from '../../features/errors/TestError';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
+import LoginForm from '../../features/users/LoginForm';
+import { useStore } from '../stores/store';
+import LoadingComponent from './LoadingComponent';
+import ModalContainer from '../../features/common/modals/ModalContainer';
 
 function App() {
   const location = useLocation();
-  return (
+  const {commonStore, userStore} = useStore();
+
+  useEffect(() => {
+    if(commonStore.token){
+      userStore.getUser().finally(() => commonStore.setAppLoaded());
+    }else{
+      commonStore.setAppLoaded();
+    }
+  }, [commonStore, userStore]);
+
+  if(!commonStore.appLoaded)
+    return <LoadingComponent content='Loading app...'/>
+
+  return (  
     <Fragment>
       <ToastContainer position='bottom-right'/>
+      <ModalContainer/>
       <Route exact path='/' component={HomePage} />
       <Route 
         path = {'/(.+)'}
@@ -33,6 +51,7 @@ function App() {
                 <Route key={location.key} path={['/activity/create', '/manage/:id']} component={ActivityForm}/>
                 <Route path='/errors' component={TestErrors}/>
                 <Route path='/server-error' component={ServerError}/>
+                <Route path='/login' component={LoginForm}/>
                 <Route component={NotFound}/>
               </Switch>
             </Container>
