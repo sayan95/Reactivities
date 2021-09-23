@@ -74,6 +74,7 @@ namespace API.Controllers
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser(){
+        
         var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
         return CreateUserObject(user);
     }

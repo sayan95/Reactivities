@@ -118,6 +118,19 @@ namespace Persistence
                     Venue = "Cinema",
                 }
             };
+            
+            var appUsers = userManager.Users.ToList();
+             
+
+            foreach (var activity in activities)
+            {   int rand = new Random().Next(0,3);
+                activity.Attendees = new List<ActivityAttendee>{
+                    new ActivityAttendee(){
+                        Activity = activity,
+                        AppUser = appUsers[rand]
+                    }
+                };
+            }
 
             await context.Activities.AddRangeAsync(activities);
             await context.SaveChangesAsync();
